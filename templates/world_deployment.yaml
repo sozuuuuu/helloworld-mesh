@@ -1,0 +1,31 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-world
+  labels:
+    app: {{ .Chart.Name }}-world
+    linkerd: sidecar
+    release: {{ .Release.Name }}
+spec:
+  replicas: 3
+  template:
+    metadata:
+      name: {{ .Release.Name }}-{{ .Chart.Name }}-world
+      labels:
+        app: {{ .Chart.Name }}-world
+        linkerd: sidecar
+        release: {{ .Release.Name }}
+    spec:
+      serviceAccountName: {{ .Values.serviceAccountName }}
+      volumes:
+        - name: linkerd-config
+          configMap:
+            name: {{ .Release.Name }}-l5d-mesh-l5d-config
+      containers:
+        - name: helloworld
+          image: buoyantio/helloworld:latest
+          args:
+            - "-text"
+            - "world"
+{{ toYaml .Values.sidecar.containers | indent 8 }}

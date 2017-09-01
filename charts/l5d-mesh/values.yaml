@@ -1,0 +1,29 @@
+ns:
+namespace: default
+exports:
+  data:
+    sidecar:
+      volumes:
+        - name: linkerd-config
+          configMap:
+            name: "{{ .Release.Name }}-{{ .Chart.Name }}-l5d-config"
+      containers:
+        - name: linkerd
+          image: buoyantio/linkerd:latest
+          volumeMounts:
+            - name: linkerd-config
+              mountPath: /etc/linkerd
+              readOnly: true
+          args:
+            - /etc/linkerd/config.yaml
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+        - name: kubectl
+          image: buoyantio/kubectl:v1.4.0
+          args:
+            - "proxy"
+            - "-p"
+            - "8001"

@@ -1,0 +1,36 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-hello
+  labels:
+    app: {{ .Chart.Name }}-hello
+    linkerd: sidecar
+    release: {{ .Release.Name }}
+spec:
+  replicas: 3
+  template:
+    metadata:
+      name: {{ .Release.Name }}-{{ .Chart.Name }}-hello
+      labels:
+        app: {{ .Chart.Name }}-hello
+        linkerd: sidecar
+        release: {{ .Release.Name }}
+    spec:
+      serviceAccountName: {{ .Values.serviceAccountName }}
+      volumes:
+        # todo: namerdを使って毎回カスタマイズしなくてよくする
+        - name: linkerd-config
+          configMap:
+            name: {{ .Release.Name }}-l5d-mesh-l5d-config
+      containers:
+        - name: helloworld
+          image: buoyantio/helloworld:latest
+          args:
+            - "-target"
+            - "world"
+          env:
+            - name: http_proxy
+              value: localhost:4140
+# Sidecar containers from child chart dep
+{{ toYaml .Values.sidecar.containers | indent 8 }}

@@ -1,0 +1,4 @@
+dependencies:
+  - name: l5d-mesh
+    import-values:
+      - data
