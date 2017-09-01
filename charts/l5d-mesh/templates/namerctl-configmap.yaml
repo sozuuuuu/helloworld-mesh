@@ -15,12 +15,8 @@ data:
       echo "{{ default .Release.Namespace .Values.ns }} namespace does not exist. Creating...."
 
       echo "
-      {{- if .Values.ns }}
-      /svc => /withLabel/{{ .Values.ns }};
-      /withLabel => /#/swap;
-      /swap => /#/io.l5d.k8s.rg/{{ .Release.Namespace }}/http;
-      {{- else }}
-      /svc => /#/io.l5d.k8s/{{ .Release.Namespace }}/http;
-      {{- end }}
+      /svc => /host/{{ default .Release.Name .Values.svcPfx }}-;
+      /host => /#/concat;
+      /concatenated => /#/io.l5d.k8s/{{ .Release.Namespace }}/http;
       " | namerctl dtab create {{ default .Release.Namespace .Values.ns }} -
     fi

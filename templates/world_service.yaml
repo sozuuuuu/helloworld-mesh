@@ -1,10 +1,9 @@
+{{- $svcPfx := (index .Values "l5d-mesh" "svcPfx") }}
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: world
-  labels:
-    release-group: hoge
+  name: {{ default .Release.Name $svcPfx }}-world
 spec:
   type: NodePort
   selector:

@@ -1,8 +1,0 @@
-serviceAccountName: helloworld
-
-l5d-mesh:
-  ns: hoge
-
-hello:
-  service:
-    name: hello
