@@ -1,5 +1,5 @@
 serviceAccountName: helloworld
 
 l5d-mesh:
-  ns: hello-v1
+  ns: helloworld-production
   svcPfx: v1
