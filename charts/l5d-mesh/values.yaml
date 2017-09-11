@@ -3,6 +3,8 @@ namespace: default
 exports:
   data:
     sidecar:
+      labels:
+        linkerd: sidecar
       volumes:
         - name: linkerd-config
           configMap:
