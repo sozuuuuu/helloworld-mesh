@@ -5,8 +5,8 @@ metadata:
   name: {{ .Release.Name }}-{{ .Chart.Name }}-hello
   labels:
     app: {{ .Chart.Name }}-hello
-    linkerd: sidecar
     release: {{ .Release.Name }}
+{{ toYaml .Values.sidecar.labels | indent 4 }}
 spec:
   replicas: 3
   template:
